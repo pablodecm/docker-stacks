@@ -4,7 +4,7 @@
 
 # Use bash for inline if-statements in arch_patch target
 SHELL:=bash
-OWNER:=jupyter
+OWNER:=treelogic
 ARCH:=$(shell uname -m)
 DIFF_RANGE?=master...HEAD
 
@@ -19,7 +19,8 @@ ALL_STACKS:=base-notebook \
 	tensorflow-notebook \
 	datascience-notebook \
 	pyspark-notebook \
-	all-spark-notebook
+	all-spark-notebook \
+	vision-notebook
 endif
 
 ALL_IMAGES:=$(ALL_STACKS)
@@ -44,7 +45,7 @@ arch_patch/%: ## apply hardware architecture specific patches to the Dockerfile
 
 build/%: DARGS?=
 build/%: ## build the latest image for a stack
-	docker build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@):latest ./$(notdir $@)
+	docker build $(DARGS) --rm --force-rm -t $(OWNER)/$(notdir $@)-gpu:latest ./$(notdir $@)
 
 build-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) ) ## build all stacks
 build-test-all: $(foreach I,$(ALL_IMAGES),arch_patch/$(I) build/$(I) test/$(I) ) ## build and test all stacks
