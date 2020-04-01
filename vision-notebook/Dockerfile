@@ -53,3 +53,5 @@ RUN pip install --quiet \
     fix-permissions /home/$NB_USER
 
 RUN fix-permissions /opt/intel
+
+ENV TF_FORCE_GPU_ALLOW_GROWTH "true"
